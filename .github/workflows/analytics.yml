@@ -1,0 +1,63 @@
+# Pulls Instagram insights and updates the learned topic/hook weights. 20:30 UTC = 02:00 IST.
+name: analytics
+on:
+  schedule:
+    - cron: "30 20 * * *"
+  workflow_dispatch:
+concurrency:
+  group: newsroom-state
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  analytics:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: System packages (ffmpeg and fonts)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core fonts-noto-core
+      - run: pip install -r requirements.txt
+      - name: Load state branch
+        run: bash scripts/state_sync.sh pull
+      - name: Run analytics
+        run: python -m newsroom.cli analytics
+        env:
+          DRY_RUN: ${{ vars.DRY_RUN || 'true' }}
+          APPROVAL_MODE: ${{ vars.APPROVAL_MODE || 'telegram' }}
+          NEWSROOM_DB: state/newsroom.sqlite3
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
+          GOOGLE_TTS_VOICE: ${{ vars.GOOGLE_TTS_VOICE }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
+          ELEVENLABS_MODEL: ${{ vars.ELEVENLABS_MODEL }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Save state branch
+        if: always()
+        run: bash scripts/state_sync.sh push
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: analytics-logs
+          path: logs/
+          if-no-files-found: ignore
+          retention-days: 7
