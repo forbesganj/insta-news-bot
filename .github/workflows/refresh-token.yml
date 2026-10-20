@@ -1,0 +1,32 @@
+# Instagram long-lived tokens last 60 days. This refreshes the token twice a month and stores the
+# new one back into the IG_ACCESS_TOKEN secret. Needs a fine-grained personal access token in the
+# GH_PAT secret with "Secrets: Read and write" permission on this repository.
+name: refresh-token
+on:
+  schedule:
+    - cron: "0 4 1,15 * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Refresh and store token
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          NEWSROOM_DB: /tmp/refresh.sqlite3
+        run: |
+          NEW="$(python -m newsroom.cli refresh-token --print-token)"
+          echo "::add-mask::$NEW"
+          test -n "$NEW"
+          gh secret set IG_ACCESS_TOKEN --body "$NEW" --repo "$GITHUB_REPOSITORY"
+          echo "IG_ACCESS_TOKEN secret updated"

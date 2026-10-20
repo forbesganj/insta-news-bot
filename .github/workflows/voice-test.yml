@@ -1,0 +1,57 @@
+# Manual: Actions > voice-test > Run workflow. Sends a sample read of your configured voice(s) to Telegram
+# so you can LISTEN before you go live. Change the voice by typing a ElevenLabs voice ID or a Google voice name.
+name: voice-test
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: "auto (all configured), elevenlabs or google"
+        default: "auto"
+        required: false
+      voice:
+        description: "Optional: ElevenLabs voice ID, or Google voice name such as en-IN-Chirp3-HD-Aoede"
+        default: ""
+        required: false
+      text:
+        description: "Optional: your own sample text"
+        default: ""
+        required: false
+permissions:
+  contents: read
+jobs:
+  voice-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - run: pip install -r requirements.txt
+      - name: Synthesize samples
+        env:
+          PROVIDER: ${{ inputs.provider }}
+          VOICE: ${{ inputs.voice }}
+          TEXT: ${{ inputs.text }}
+          NEWSROOM_DB: /tmp/voice.sqlite3
+          GOOGLE_TTS_API_KEY: ${{ secrets.GOOGLE_TTS_API_KEY }}
+          GOOGLE_TTS_VOICE: ${{ vars.GOOGLE_TTS_VOICE }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ELEVENLABS_VOICE_ID: ${{ secrets.ELEVENLABS_VOICE_ID }}
+          ELEVENLABS_MODEL: ${{ vars.ELEVENLABS_MODEL }}
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python -m newsroom.cli voice-test --provider "$PROVIDER" --voice "$VOICE" --text "$TEXT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: voice-samples
+          path: out/voice_test/
+          if-no-files-found: ignore
+          retention-days: 3
