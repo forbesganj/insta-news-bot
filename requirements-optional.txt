@@ -1,0 +1,2 @@
+# Only needed if you host videos on Cloudflare R2 instead of Supabase:
+boto3>=1.34.0

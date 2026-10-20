@@ -1,0 +1,8 @@
+
+# --- newsroom pipeline ---
+/state/
+/out/
+/logs/
+.env
+*.sqlite3
+__pycache__/
