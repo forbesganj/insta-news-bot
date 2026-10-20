@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "note": "Allow-list of upstream hook formulas (ids from skills/ig-reel/hooks.json) that are safe for a faceless THIRD-PERSON news page. First-person formulas (1 Cost Confession, 6 The Receipt, 8 Insider Leak, 13 Before And After, 15 The Flop Record, 21 Mid-Sentence Start, 25 Someone Else's Result) are excluded because they would invent personal experience. 'prior' is the starting weight before analytics data exists.",
+  "formulas": [
+    {"id": 23, "name": "The Statistic", "prior": 1.0, "template": "{N}% / {big number} of {group} {surprising fact}.", "example": "India now handles 20 billion UPI payments in a single month."},
+    {"id": 24, "name": "The Reveal", "prior": 1.0, "template": "This is the new {thing}, and it changes {one stake}.", "example": "This is the new RBI rule, and it changes how UPI limits work."},
+    {"id": 19, "name": "The Deadline", "prior": 1.0, "template": "{Thing} changes on {real date}. Here is what to do before then.", "example": "UPI limits change on 1 September. Here is who is affected."},
+    {"id": 10, "name": "If This, Then Watch", "prior": 0.9, "template": "If you {specific situation}, this {short time} matters.", "example": "If you pay shops with UPI, this change matters."},
+    {"id": 16, "name": "The Verbatim Question", "prior": 0.9, "template": "{Question people actually ask}?", "example": "Is your UPI payment about to cost money?"},
+    {"id": 14, "name": "The Callout", "prior": 0.9, "template": "{Specific group}: this is the update you have been waiting for.", "example": "Small shop owners: this payment change is for you."},
+    {"id": 11, "name": "Numbered With A Favourite", "prior": 0.8, "template": "{N} things from {event}. Number {k} is the one that matters.", "example": "Three things from today's AI launch. Number two matters most."},
+    {"id": 17, "name": "Head To Head", "prior": 0.8, "template": "{A} versus {B}: here is how they compare on the facts.", "example": "GPT versus Gemini: here is what the new numbers say."},
+    {"id": 26, "name": "The Superlative", "prior": 0.8, "template": "The {biggest / fastest / first} {thing} is {the fact}.", "example": "The biggest AI deal this year is now official."},
+    {"id": 3, "name": "Nobody Tells You", "prior": 0.7, "template": "Nobody is talking about {the catch in the news}.", "example": "Nobody is talking about the catch in this funding round."},
+    {"id": 4, "name": "The Replacement", "prior": 0.7, "template": "{This tool} now does {job} for {price}.", "example": "This free tool now does what a paid one charged for."},
+    {"id": 5, "name": "Time Collapse", "prior": 0.7, "template": "{Task} used to take {long time}. Now it takes {short time}.", "example": "Video editing used to take hours. This tool does it in minutes."}
+  ]
+}

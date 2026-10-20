@@ -1,0 +1,31 @@
+# Overrides for the defaults in newsroom/settings.py. Only change what you need.
+brand:
+  name: "The Daily Byte India"
+  handle: "@dailybyteindia"
+  tagline: "AI, tech and business in 30 seconds"
+  language: en            # en (English / Hinglish written in Latin script)
+  accent: "#FFB800"
+  bg_top: "#0B1220"
+  bg_bottom: "#1B2B4B"
+
+verify:
+  min_independent_sources: 2     # distinct outlet groups required unless a tier-1 source confirms
+  min_facts: 3
+
+gates:
+  hook_min: 55.0                 # upstream hookscore.py threshold (README: 54.4 = 'OK')
+  human_min: 60.0                # upstream detect.py human-score threshold
+  humanize_mode: builtin         # builtin | upstream_stdout | upstream_inplace (see docs/SETUP.md)
+  upstream_strict: false         # true = fail the story when an upstream tool is missing/unparseable
+
+publish:
+  max_posts_per_day: 5           # Meta allows 100/24h; this is YOUR quality cap
+  min_gap_minutes: 90
+  queue_target: 4
+  queue_ttl_hours: 36
+  publish_per_run: 1
+
+media:
+  tts_provider: auto             # auto | azure | google | edge | none
+  voice_en: "en-IN-NeerjaNeural"
+  use_pexels: true

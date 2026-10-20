@@ -1,0 +1,24 @@
+# Content pillars. `keywords` drive classification and the niche-fit score.
+# `weight` is the target share of output (used as a prior before analytics exist).
+pillars:
+  ai:
+    label: AI news explained
+    weight: 0.40
+    hashtags: [ai, artificialintelligence, techindia]
+    keywords: [ai, openai, chatgpt, gemini, claude, llm, model, gpu, nvidia, copilot, agent, machine learning, neural, deepseek, anthropic, generative]
+  business:
+    label: Business and startup stories
+    weight: 0.25
+    hashtags: [startupindia, business, indiabusiness]
+    keywords: [startup, funding, raises, valuation, ipo, acquisition, acquires, revenue, profit, merger, unicorn, founder, series a, series b, layoffs]
+  money:
+    label: What it means for your money
+    weight: 0.20
+    hashtags: [fintech, upi, personalfinance]
+    keywords: [upi, rbi, bank, loan, tax, gst, inflation, rupee, credit card, mutual fund, sebi, payments, interest rate, fintech, wallet]
+  tools:
+    label: Tools and how-tos
+    weight: 0.15
+    hashtags: [aitools, productivity, techtips]
+    keywords: [launches, launch, release, update, app, feature, tool, plugin, open source, api, free, pricing, subscription]
+default: tech

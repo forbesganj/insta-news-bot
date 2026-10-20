@@ -1,0 +1,102 @@
+# News and trend sources. Edit freely: a feed that fails is logged and skipped, never fatal.
+# tier 1 = primary source (company/government announcement)
+# tier 2 = established news outlet
+# tier 3 = aggregator / blog / social signal
+rss:
+  - {name: TechCrunch,            url: "https://techcrunch.com/feed/",                              tier: 2, pillar_hint: tech}
+  - {name: The Verge,             url: "https://www.theverge.com/rss/index.xml",                    tier: 2, pillar_hint: tech}
+  - {name: Ars Technica,          url: "https://feeds.arstechnica.com/arstechnica/index",           tier: 2, pillar_hint: tech}
+  - {name: MIT Technology Review, url: "https://www.technologyreview.com/feed/",                    tier: 2, pillar_hint: ai}
+  - {name: BBC Technology,        url: "https://feeds.bbci.co.uk/news/technology/rss.xml",          tier: 2, pillar_hint: tech}
+  - {name: BBC Business,          url: "https://feeds.bbci.co.uk/news/business/rss.xml",            tier: 2, pillar_hint: business}
+  - {name: The Guardian Tech,     url: "https://www.theguardian.com/technology/rss",                tier: 2, pillar_hint: tech}
+  - {name: Mint Technology,       url: "https://www.livemint.com/rss/technology",                   tier: 2, pillar_hint: tech}
+  - {name: Mint Companies,        url: "https://www.livemint.com/rss/companies",                    tier: 2, pillar_hint: business}
+  - {name: Economic Times Tech,   url: "https://economictimes.indiatimes.com/tech/rssfeeds/13357270.cms", tier: 2, pillar_hint: tech}
+  - {name: The Hindu Business,    url: "https://www.thehindu.com/business/feeder/default.rss",      tier: 2, pillar_hint: business}
+  - {name: Inc42,                 url: "https://inc42.com/feed/",                                   tier: 2, pillar_hint: business}
+  - {name: YourStory,             url: "https://yourstory.com/feed",                                tier: 2, pillar_hint: business}
+  # primary sources (tier 1): company and regulator announcements
+  - {name: OpenAI News,           url: "https://openai.com/news/rss.xml",                           tier: 1, pillar_hint: ai}
+  - {name: Google Blog AI,        url: "https://blog.google/technology/ai/rss/",                    tier: 1, pillar_hint: ai}
+  - {name: NVIDIA Blog,           url: "https://blogs.nvidia.com/feed/",                            tier: 1, pillar_hint: ai}
+  - {name: RBI Press Releases,    url: "https://www.rbi.org.in/pressreleases_rss.xml",              tier: 1, pillar_hint: money}
+
+# Corroboration and trend signals. Google News links are redirects, so they are used only to
+# confirm that several outlets cover a story, never to fetch article text.
+google_news:
+  hl: en-IN
+  gl: IN
+  ceid: "IN:en"
+  when: 1d
+  queries:
+    - artificial intelligence India
+    - tech news India
+    - startup funding India
+    - RBI UPI fintech
+
+hackernews:
+  enabled: true
+  top_n: 40
+  min_score: 150
+
+google_trends:      # unofficial public feed; safe to disable
+  enabled: true
+  geos: [IN]
+
+reddit:             # official OAuth API; needs REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET
+  enabled: false
+  min_score: 300
+  subreddits: [technology, artificial, IndiaTech]
+
+tiers:
+  tier1_domains:
+    - openai.com
+    - blog.google
+    - nvidia.com
+    - rbi.org.in
+    - sebi.gov.in
+    - pib.gov.in
+    - meity.gov.in
+    - npci.org.in
+    - microsoft.com
+    - anthropic.com
+    - ai.meta.com
+    - about.fb.com
+    - aws.amazon.com
+    - apple.com
+  tier2_domains:
+    - techcrunch.com
+    - theverge.com
+    - arstechnica.com
+    - technologyreview.com
+    - bbc.co.uk
+    - bbc.com
+    - theguardian.com
+    - livemint.com
+    - indiatimes.com
+    - thehindu.com
+    - business-standard.com
+    - hindustantimes.com
+    - inc42.com
+    - yourstory.com
+    - reuters.com
+    - bloomberg.com
+    - wired.com
+    - cnbc.com
+    - ft.com
+    - wsj.com
+    - nytimes.com
+    - indianexpress.com
+    - moneycontrol.com
+    - ndtv.com
+
+# Outlets owned by the same group count as ONE independent source.
+syndication_groups:
+  - [indiatimes.com, timesofindia.com]
+  - [bbc.co.uk, bbc.com]
+  - [livemint.com, hindustantimes.com]
+
+# Never used as a source.
+blocklist_domains:
+  - example-fake-news.invalid
